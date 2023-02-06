@@ -4,11 +4,12 @@ import Input from "./Input";
 const FormLogin = () => {
     /* const [email, setEmail] = useState("");
     const [password, setPassword] = useState(""); */
-
-    const [input, setInput] = useState({
+    const initialValues = {
         email: "",
         password: "",
-    });
+    };
+
+    const [input, setInput] = useState(initialValues);
 
     const handleChange = (e) => {
         setInput({
@@ -17,16 +18,17 @@ const FormLogin = () => {
         });
     };
 
-    const onSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         console.log(input);
+        setInput(initialValues);
     };
 
     return (
-        <form onSubmit={onSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
             <input type="hidden" name="remember" defaultValue="true" />
-            <Input labelText={"Correo Electrónico:"} type={"email"} name={"email"} placeholder={"example@gmail.com"} onChange={handleChange} />
-            <Input labelText={"Password:"} type={"password"} name={"password"} placeholder={"**********"} onChange={handleChange} />
+            <Input labelText={"Correo Electrónico:"} type={"email"} name={"email"} placeholder={"example@gmail.com"} onChange={handleChange} value={input.email}/>
+            <Input labelText={"Password:"} type={"password"} name={"password"} placeholder={"**********"} onChange={handleChange} value={input.password} />
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
                     <input
