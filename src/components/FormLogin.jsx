@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "./Input";
+import { login } from "../utils/auth";
 const FormLogin = () => {
     /* const [email, setEmail] = useState("");
     const [password, setPassword] = useState(""); */
@@ -20,8 +21,7 @@ const FormLogin = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(input);
-        setInput(initialValues);
+        login(input);
     };
 
     return (
