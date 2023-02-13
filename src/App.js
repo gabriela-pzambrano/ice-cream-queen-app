@@ -2,12 +2,14 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 function App() {
   return (
-    <main className="bg-background">
+    <main className="bg-background h-full overflow-hidden">
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <ToastContainer
         position="top-center"
