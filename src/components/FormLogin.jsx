@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "./Input";
 import { login } from "../utils/auth";
+
 const FormLogin = () => {
     /* const [email, setEmail] = useState("");
     const [password, setPassword] = useState(""); */
+    const navigate = useNavigate(); //envia a una ruta
     const initialValues = {
         email: "",
         password: "",
     };
 
-    const [input, setInput] = useState(initialValues);
+    const [input, setInput] = useState(initialValues); // estado
 
     const handleChange = (e) => {
         setInput({
@@ -19,15 +21,20 @@ const FormLogin = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        login(input);
+        const isLogin = await login(input);
+        if (isLogin) {
+            setTimeout(() => {
+                navigate("/dashboard");
+            }, 3000);
+        }
     };
 
     return (
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
             <input type="hidden" name="remember" defaultValue="true" />
-            <Input labelText={"Correo Electrónico:"} type={"email"} name={"email"} placeholder={"example@gmail.com"} onChange={handleChange} value={input.email}/>
+            <Input labelText={"Correo Electrónico:"} type={"email"} name={"email"} placeholder={"example@gmail.com"} onChange={handleChange} value={input.email} />
             <Input labelText={"Password:"} type={"password"} name={"password"} placeholder={"**********"} onChange={handleChange} value={input.password} />
             <div className="flex items-center justify-between">
                 <div className="flex items-center">

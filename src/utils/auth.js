@@ -9,7 +9,9 @@ export const login = async (user) => {
         localStorage.setItem("user", JSON.stringify(localStorageUser.user));
         localStorage.setItem("token", JSON.stringify(localStorageUser.token));
         toast.success("¡Éxito! Redirigiendo...");
+        return true;
     } catch (error) {
         toast.error(error.response.data.error);
+        return false;
     }
 };
