@@ -2,10 +2,10 @@ import React from 'react';
 import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import FormLogin from '../../components/FormLogin';
-import { login } from '../../utils/auth';
+import { login } from '../../api/auth';
 
 jest.mock('axios');
-jest.mock('../../utils/auth', () => ({
+jest.mock('../../api/auth', () => ({
     login: jest.fn(() => Promise.resolve(true)),
 }));
 

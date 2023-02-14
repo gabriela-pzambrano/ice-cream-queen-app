@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "./Input";
-import { login } from "../utils/auth";
+import { login } from "../api/auth";
 
 const FormLogin = () => {
     /* const [email, setEmail] = useState("");
