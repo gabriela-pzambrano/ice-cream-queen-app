@@ -7,6 +7,7 @@ import { Menu, Transition } from '@headlessui/react';
 import AdminAvatar from '../assets/admin.svg';
 import ChefAvatar from '../assets/cocina.svg';
 import MeseroAvatar from '../assets/mesero.svg';
+import { Link } from 'react-router-dom';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -90,15 +91,16 @@ const HeaderDashboard = ({userNavigation,setMobileMenuOpen}) => {
                   {userNavigation.map((item) => (
                     <Menu.Item key={item.name}>
                       {({ active }) => (
-                        <a
-                          href={item.href}
-                          className={classNames(
-                            active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700'
-                          )}
-                        >
-                          {item.name}
-                        </a>
+                        <Link
+                        to={item.href}
+                        onClick={item.name === "Cerrar Sesión" && localStorage.clear()}
+                        className={classNames(
+                          active ? 'bg-gray-100' : '',
+                          'block px-4 py-2 text-sm text-gray-700'
+                        )}
+                      >
+                        {item.name}
+                      </Link>
                       )}
                     </Menu.Item>
                   ))}
