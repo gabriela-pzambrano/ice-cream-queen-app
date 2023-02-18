@@ -8,7 +8,7 @@ function classNames(...classes) {
 
 const MenuDesktop = ({sidebarNavigation}) => {
   return (
-    <div className="hidden w-32 overflow-y-auto bg-primary-700 md:block">
+    <div className="hidden w-36 overflow-y-auto bg-primary-700 md:block">
       <div className="flex w-full flex-col items-center py-6">
         <div className="flex flex-shrink-0 items-center">
           <img className="h-12 w-auto" src={logo} alt="Your Company" />
@@ -41,7 +41,7 @@ const MenuDesktop = ({sidebarNavigation}) => {
         </div>
       </div>
       <img
-        className="w-32 absolute bottom-0"
+        className="w-36 absolute bottom-0"
         src={bottomIceCream}
         alt="Your Company"
       />

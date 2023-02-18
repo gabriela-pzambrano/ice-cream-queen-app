@@ -1,0 +1,18 @@
+/* Estilos para el botón "prev" de navegación */
+.swiper-button-prev {
+    color: #fff;
+    border-radius: 999px;
+    width: 50px;
+    height: 50px;
+  }
+  
+  /* Estilos para el botón "next" de navegación */
+  .swiper-button-next {
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    border-radius: 999px;
+    width: 50px;
+    height: 50px;
+  }
+  
