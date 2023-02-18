@@ -4,10 +4,18 @@ import { MemoryRouter } from 'react-router-dom';
 import FormLogin from '../../components/FormLogin';
 import { login } from '../../api/auth';
 
+
 jest.mock('axios');
 jest.mock('../../api/auth', () => ({
     login: jest.fn(() => Promise.resolve(true)),
 }));
+
+/* const navigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+   ...jest.requireActual('react-router-dom'),
+  useNavigate: () => navigate,
+})); */
 
 describe('FormLogin component', () => {
     test('Verify that the component correctly renders the login form', () => {
@@ -62,5 +70,7 @@ describe('FormLogin component', () => {
             email: "test@example.com",
             password: "password",
         });
+
+        /* expect(navigate).toHaveBeenCalledWith('/dashboard'); */
     });
 });
