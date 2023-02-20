@@ -1,14 +1,22 @@
-/* eslint-disable jsx-a11y/no-redundant-roles */
-/* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-
-/* function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-} */
+import Input from '../components/Input';
 
 const SideBarOrders = ({ open, setOpen, orders }) => {
+  const initialValues = {
+    name: "",
+    products: [],
+  };
+  const [orderActive, setOrderActive] = useState(initialValues);
+
+  const handleChange = (e) => {
+    setOrderActive({
+      ...orderActive,
+      [e.target.name]: e.target.value,
+    })
+  };
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -35,7 +43,7 @@ const SideBarOrders = ({ open, setOpen, orders }) => {
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500"
+                            className="rounded-md bg-primary-500 text-background hover:text-gray-500 focus:ring-2 focus:ring-primary-500 p-1"
                             onClick={() => setOpen(!open)}
                           >
                             <span className="sr-only">Close panel</span>
@@ -44,14 +52,15 @@ const SideBarOrders = ({ open, setOpen, orders }) => {
                         </div>
                       </div>
                     </div>
-
+                    <div className='px-4'>
+                      <Input labelText={"Nombre del Cliente:"} type={"text"} name={"name"} placeholder={"Ej: Mariana Lopez..."} onChange={handleChange} value={orderActive.name}/>
+                    </div>
                     <ul
-                      role="list"
                       className="flex-1 divide-y divide-gray-200 overflow-y-auto"
                     >
-                      {orders?.map((order) => (
-                        <li key={order.id}>
-                          <div className="group relative flex items-center py-6 px-5">
+                      {orders?.map((order, index) => (
+                        <li key={index}>
+                          <div className="group relative flex items-center py-4 px-5">
                             <a
                               href={order.href}
                               className="-m-1 block flex-1 p-1"
@@ -72,8 +81,8 @@ const SideBarOrders = ({ open, setOpen, orders }) => {
                                   <p className="truncate text-sm font-medium text-gray-900 capitalize">
                                     {order.name}
                                   </p>
-                                  <p className="truncate text-md text-gray-500">
-                                    <span className='text-primary-500 text-sm font-semibold'>Precio Unitario: </span>{'S/.' + order.price.toFixed(2)}
+                                  <p className="truncate text-sm text-gray-500">
+                                    <span className='text-primary-500 text-xs font-semibold'>Precio Unitario: </span>{'S/.' + order.price.toFixed(2)}
                                   </p>
                                 </div>
                               </div>

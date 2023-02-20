@@ -2,7 +2,6 @@ import { API_URL } from './API';
 import axios from 'axios';
 
 export const getProducts = async (token, limit, page) => {
-  console.log(limit)
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
