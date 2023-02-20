@@ -1,7 +1,7 @@
 import React from 'react';
 import CardProduct from './CardProduct';
 import Paginacion from './Paginacion';
-
+import './carousel.css';
 const GridCardsProducts = ({ products, paginacion, setPage, page, addOrders }) => {
   return (
     <div className="mx-auto max-w-2xl py-4 px-4 sm:py-4 sm:px-6 lg:max-w-6xl lg:px-8 xl:max-w-[100rem] xl:px-8">
@@ -25,9 +25,9 @@ const GridCardsProducts = ({ products, paginacion, setPage, page, addOrders }) =
         </h3>
       </div>
       <section className="mt-4 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-4">
-        {products.map((product) => {
+        {products.map((product, index) => {
           return (
-            <div key={product.id}>
+            <div key={index}>
               <CardProduct
                 name={product.name}
                 type={product.type}
@@ -40,7 +40,6 @@ const GridCardsProducts = ({ products, paginacion, setPage, page, addOrders }) =
           )
         })}
       </section>
-      {console.log(paginacion)}
       <Paginacion currentPage={page} totalPages={paginacion.pages} onPageChange={setPage}/>
     </div>
   );

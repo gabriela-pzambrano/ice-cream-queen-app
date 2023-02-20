@@ -50,7 +50,7 @@ const Dashboard = () => {
   const [limit, setLimit] = useState();
   const [page, setPage] = useState(1);
   const [paginacion, setPaginacion] = useState({});
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState(JSON.parse(localStorage.getItem("orders")) || []);
 
   const handleResize = () => {
     setWidth(window.innerWidth);
@@ -71,7 +71,6 @@ const Dashboard = () => {
   };
 
   const addOrders = (product) => {
-    console.log(product._id);
     const duplicado = orders.find((order) => order._id === product._id);
     if(!duplicado){
       setOrders([...orders, product]);
@@ -89,6 +88,12 @@ const Dashboard = () => {
     getProducts(token, limit, page).then((response) => dataProducts(response));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit, page]);
+
+  useEffect(() => {
+    if(orders.length > 0){
+      localStorage.setItem("orders", JSON.stringify(orders));
+    }
+  }, [orders]);
 
   return (
     <>

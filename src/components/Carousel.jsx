@@ -52,12 +52,10 @@ const Carousel = () => {
 
   SwiperCore.use([Autoplay]);
   return (
-    <section className="mx-auto py-4 px-4 sm:py-4 sm:px-6 lg:max-w-7xl lg:px-8 xl:max-w-[65rem] xl:px-8">
+    <section className="cursor-pointer mx-auto py-4 px-10 sm:py-4 sm:px-10 lg:max-w-7xl lg:px-10 xl:max-w-[65rem] xl:px-10">
       <Swiper
-        slidesPerView={4}
         modules={[Navigation, Pagination, Scrollbar, A11y]}
         spaceBetween={5}
-        navigation
         autoplay={{
           delay: 3200,
           disableOnInteraction: false,
