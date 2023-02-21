@@ -37,13 +37,13 @@ const types = {
       'hover:bg-[#e3972c] focus:outline-none focus:ring-2 focus:bg-[#e3972c]',
     bottom: blueBottom,
   },
-  "milk shakes": {
+  'milk shakes': {
     bg: 'bg-[#4FABF5]',
     border: 'border-[#4FABF5]',
     hover:
       'hover:bg-[#3892dc] focus:outline-none focus:ring-2 focus:bg-[#3892dc]',
     bottom: blueBottom,
-  }
+  },
 };
 
 const CardProduct = ({ keyProduct, name, type, image, price, product, addOrders }) => {
@@ -101,14 +101,14 @@ const CardProduct = ({ keyProduct, name, type, image, price, product, addOrders 
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          strokeWidth={2.5}
+          strokeWidth={2}
           stroke="currentColor"
-          className="w-6 h-6 sm:w-6 sm:h-6"
+          className="w-5 h-5"
         >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
+            d="M12 4.5v15m7.5-7.5h-15"
           />
         </svg>
       </button>

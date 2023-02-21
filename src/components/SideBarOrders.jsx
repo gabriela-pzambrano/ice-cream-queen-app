@@ -2,19 +2,28 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Input from '../components/Input';
+import ItemOrderSidebar from './ItemOrderSidebar';
+import { createOrder } from '../api/createOrder';
 
-const SideBarOrders = ({ open, setOpen, orders }) => {
-  const initialValues = {
-    name: "",
-    products: [],
-  };
-  const [orderActive, setOrderActive] = useState(initialValues);
-
+const SideBarOrders = ({ open, setOpen, orders, removeOrder, clearOrders, changeQtyProduct }) => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const token = JSON.parse(localStorage.getItem("token"));
+  const [clientName, setClientName] = useState("");
   const handleChange = (e) => {
-    setOrderActive({
-      ...orderActive,
-      [e.target.name]: e.target.value,
-    })
+    setClientName(e.target.value);
+  };
+//userId - client - products[{qty: 0 , productId}];
+  const submitOrder = () => {
+    const products = orders.map((order) => {return {qty: order.qty , productId: order._id}});
+    const objectOrder = {
+      userId: user._id,
+      client: clientName,
+      products: products
+    }
+    createOrder(token, objectOrder);
+    clearOrders();
+    setClientName("");
+    
   };
 
   return (
@@ -52,46 +61,57 @@ const SideBarOrders = ({ open, setOpen, orders }) => {
                         </div>
                       </div>
                     </div>
-                    <div className='px-4'>
-                      <Input labelText={"Nombre del Cliente:"} type={"text"} name={"name"} placeholder={"Ej: Mariana Lopez..."} onChange={handleChange} value={orderActive.name}/>
+                    <div className="px-4 py-2 border-b-2">
+                      <div className="text-primary-500 font-semibold text-sm flex items-center">
+                        Usuario Activo {'|'}
+                        <span className="ml-2 text-dark opacity-75 text-xs">
+                          {user.email}
+                        </span>
+                        <span className="ml-2 text-background text-xs py-1 px-2 bg-primary-500 rounded-md">
+                          {user.roles.admin
+                            ? 'Admin'
+                            : user.roles.cocina
+                            ? 'Chef'
+                            : 'Mesero'}
+                        </span>
+                      </div>
                     </div>
-                    <ul
-                      className="flex-1 divide-y divide-gray-200 overflow-y-auto"
-                    >
+                    <div className="px-4 py-4">
+                      <Input
+                        labelText={'Nombre del Cliente:'}
+                        type={'text'}
+                        name={'name'}
+                        placeholder={'Ej: Mariana Lopez...'}
+                        onChange={handleChange}
+                        value={clientName}
+                      />
+                    </div>
+                    <ul className="flex-1 divide-y divide-gray-200 overflow-y-auto">
                       {orders?.map((order, index) => (
                         <li key={index}>
-                          <div className="group relative flex items-center py-4 px-5">
-                            <a
-                              href={order.href}
-                              className="-m-1 block flex-1 p-1"
-                            >
-                              <div
-                                className="absolute inset-0 group-hover:bg-gray-50"
-                                aria-hidden="true"
-                              />
-                              <div className="relative flex min-w-0 flex-1 items-center">
-                                <span className="relative inline-block flex-shrink-0">
-                                  <img
-                                    className="h-12 w-14 rounded-xl object-cover"
-                                    src={order.image}
-                                    alt=""
-                                  />
-                                </span>
-                                <div className="ml-4 truncate">
-                                  <p className="truncate text-sm font-medium text-gray-900 capitalize">
-                                    {order.name}
-                                  </p>
-                                  <p className="truncate text-sm text-gray-500">
-                                    <span className='text-primary-500 text-xs font-semibold'>Precio Unitario: </span>{'S/.' + order.price.toFixed(2)}
-                                  </p>
-                                </div>
-                              </div>
-                            </a>
-                           {/*  Acá va el input de cantidad */}
-                          </div>
+                          <ItemOrderSidebar
+                            id={order._id}
+                            image={order.image}
+                            name={order.name}
+                            price={order.price}
+                            removeOrder={removeOrder}
+                            qty={order.qty}
+                            changeQtyProduct={changeQtyProduct}
+                          />
                         </li>
                       ))}
                     </ul>
+                    <div className="flex items-center justify-center w-full p-4 gap-2">
+                      <button
+                        onClick={() => clearOrders()}
+                        className="bg-[#FE7493] text-background px-4 py-2 w-full text-sm font-semibold rounded-md"
+                      >
+                        Limpiar Órden
+                      </button>
+                      <button onClick={() => submitOrder()} className="bg-primary-500 text-background px-4 py-2 w-full text-sm font-semibold rounded-md">
+                        Crear Órden
+                      </button>
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
