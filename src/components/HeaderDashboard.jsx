@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import {
   Bars3BottomLeftIcon,
 } from '@heroicons/react/24/outline';
@@ -8,13 +8,36 @@ import AdminAvatar from '../assets/admin.svg';
 import ChefAvatar from '../assets/cocina.svg';
 import MeseroAvatar from '../assets/mesero.svg';
 import { Link } from 'react-router-dom';
+import { searchProducts } from '../api/searchProducts';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const HeaderDashboard = ({userNavigation,setMobileMenuOpen}) => {
+const HeaderDashboard = ({ userNavigation, setMobileMenuOpen, handleSearch }) => {
   const user = JSON.parse(localStorage.getItem('user'));
+  const token = JSON.parse(localStorage.getItem("token"));
+  const [search, setSearch] = useState("");
+
+  const handleSubmit = async() => {
+    const searchData = await searchProducts(token, search);
+    handleSearch(searchData);
+  }
+
+  const handleKeyDown = async(e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      await handleSubmit();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [search]);
+
   return (
     <header className="w-full">
       <div className="relative z-10 flex h-16 flex-shrink-0 border-b border-gray-200 bg-white shadow-sm">
@@ -45,6 +68,8 @@ const HeaderDashboard = ({userNavigation,setMobileMenuOpen}) => {
                   className="h-full w-full border-transparent py-2 pl-8 pr-3 text-base text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0"
                   placeholder="Search"
                   type="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
             </form>
@@ -57,8 +82,8 @@ const HeaderDashboard = ({userNavigation,setMobileMenuOpen}) => {
                 {user.roles.admin
                   ? 'Admin'
                   : user.roles.chef
-                  ? 'Chef'
-                  : 'Mesera'}
+                    ? 'Chef'
+                    : 'Mesera'}
               </span>
             </div>
             <Menu as="div" className="relative flex-shrink-0">
@@ -71,8 +96,8 @@ const HeaderDashboard = ({userNavigation,setMobileMenuOpen}) => {
                       user.roles.admin
                         ? AdminAvatar
                         : user.roles.chef
-                        ? ChefAvatar
-                        : MeseroAvatar
+                          ? ChefAvatar
+                          : MeseroAvatar
                     }
                     alt=""
                   />
@@ -92,15 +117,15 @@ const HeaderDashboard = ({userNavigation,setMobileMenuOpen}) => {
                     <Menu.Item key={item.name}>
                       {({ active }) => (
                         <Link
-                        to={item.href}
-                        onClick={item.name === "Cerrar Sesión" && localStorage.clear()}
-                        className={classNames(
-                          active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700'
-                        )}
-                      >
-                        {item.name}
-                      </Link>
+                          to={item.href}
+                          onClick={item.name === "Cerrar Sesión" && localStorage.clear()}
+                          className={classNames(
+                            active ? 'bg-gray-100' : '',
+                            'block px-4 py-2 text-sm text-gray-700'
+                          )}
+                        >
+                          {item.name}
+                        </Link>
                       )}
                     </Menu.Item>
                   ))}

@@ -50,7 +50,9 @@ const Dashboard = () => {
   const [limit, setLimit] = useState();
   const [page, setPage] = useState(1);
   const [paginacion, setPaginacion] = useState({});
-  const [orders, setOrders] = useState(JSON.parse(localStorage.getItem("orders")) || []);
+  const [orders, setOrders] = useState(
+    JSON.parse(localStorage.getItem('orders')) || []
+  );
 
   const handleResize = () => {
     setWidth(window.innerWidth);
@@ -72,9 +74,32 @@ const Dashboard = () => {
 
   const addOrders = (product) => {
     const duplicado = orders.find((order) => order._id === product._id);
-    if(!duplicado){
-      setOrders([...orders, product]);
+    if (!duplicado) {
+      const newProduct = {
+        ...product,
+        qty: 1,
+      }
+      setOrders([...orders, newProduct]);
     }
+  };
+
+  const changeQtyProduct = (id, qty) => {
+    const updatedOrders = orders.map(order => {
+      if(order._id === id){
+        return { ...order, qty: qty };
+      }
+      return order;
+    });
+    setOrders(updatedOrders);
+  };
+
+  const removeOrder = (id) => {
+    const newOrders = orders.filter((order) => order._id !== id);
+    setOrders(newOrders);
+  };
+
+  const clearOrders = () => {
+    setOrders([]);
   };
 
   useEffect(() => {
@@ -90,7 +115,7 @@ const Dashboard = () => {
   }, [limit, page]);
 
   useEffect(() => {
-    if(orders.length > 0){
+    if(orders.length >= 0){
       localStorage.setItem("orders", JSON.stringify(orders));
     }
   }, [orders]);
@@ -110,6 +135,7 @@ const Dashboard = () => {
           <HeaderDashboard
             userNavigation={userNavigation}
             setMobileMenuOpen={setMobileMenuOpen}
+            handleSearch={dataProducts}
           />
 
           <div className="flex flex-1 flex-col items-stretch overflow-hidden bg-background">
@@ -171,7 +197,14 @@ const Dashboard = () => {
                   />
                 </svg>
               </button>
-              <SideBarOrders open={open} setOpen={setOpen} orders={orders} />
+              <SideBarOrders
+                open={open}
+                setOpen={setOpen}
+                orders={orders}
+                removeOrder={removeOrder}
+                clearOrders={clearOrders}
+                changeQtyProduct={changeQtyProduct}
+              />
             </>
           </div>
         </div>
