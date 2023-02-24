@@ -1,7 +1,5 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import {
-  Bars3BottomLeftIcon,
-} from '@heroicons/react/24/outline';
+import React, { Fragment, useEffect } from 'react';
+import { Bars3BottomLeftIcon } from '@heroicons/react/24/outline';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { Menu, Transition } from '@headlessui/react';
 import AdminAvatar from '../assets/admin.svg';
@@ -14,28 +12,37 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const HeaderDashboard = ({ userNavigation, setMobileMenuOpen, handleSearch }) => {
+const HeaderDashboard = ({
+  search,
+  setSearch,
+  userNavigation,
+  setMobileMenuOpen,
+  handleSearch,
+  limit,
+  setType,
+  labelSection, }) => {
   const user = JSON.parse(localStorage.getItem('user'));
-  const token = JSON.parse(localStorage.getItem("token"));
-  const [search, setSearch] = useState("");
+  const token = JSON.parse(localStorage.getItem('token'));
 
-  const handleSubmit = async() => {
-    const searchData = await searchProducts(token, search);
+  const handleSubmit = async () => {
+    const searchData = await searchProducts(token, search, limit, 1, 'search');
     handleSearch(searchData);
-  }
+    setType('search');
+  };
 
-  const handleKeyDown = async(e) => {
-    if (e.key === "Enter") {
+  const handleKeyDown = async (e) => {
+    if (e.key === 'Enter') {
       e.preventDefault();
       await handleSubmit();
     }
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   return (
@@ -49,30 +56,54 @@ const HeaderDashboard = ({ userNavigation, setMobileMenuOpen, handleSearch }) =>
           <span className="sr-only">Open sidebar</span>
           <Bars3BottomLeftIcon className="h-6 w-6" aria-hidden="true" />
         </button>
-        <div className="flex flex-1 justify-between px-4 sm:px-6">
+        <div className="flex flex-1 justify-between items-center px-4 sm:px-6">
           <div className="flex flex-1">
-            <form className="flex w-full md:ml-0" action="#" method="GET">
-              <label htmlFor="search-field" className="sr-only">
-                Search all files
-              </label>
-              <div className="relative w-full text-gray-400 focus-within:text-gray-600">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
-                  <MagnifyingGlassIcon
-                    className="h-5 w-5 flex-shrink-0"
-                    aria-hidden="true"
+            {/* <h2>Lista de Usuarios</h2>  */}
+            {labelSection ? (
+              <div className="flex items-center gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
+                  />
+                </svg>
+
+                <h2 className="font-semibold text-dark text-lg">
+                  {labelSection}
+                </h2>
+              </div>
+            ) : (
+              <form className="flex w-full md:ml-0" action="#" method="GET">
+                <label htmlFor="search-field" className="sr-only">
+                  Search all files
+                </label>
+                <div className="relative w-full text-gray-400 focus-within:text-gray-600">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
+                    <MagnifyingGlassIcon
+                      className="h-5 w-5 flex-shrink-0"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <input
+                    name="search-field"
+                    id="search-field"
+                    className="h-full w-full border-transparent py-2 pl-8 pr-3 text-base text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0"
+                    placeholder="Search"
+                    type="search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
-                <input
-                  name="search-field"
-                  id="search-field"
-                  className="h-full w-full border-transparent py-2 pl-8 pr-3 text-base text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0"
-                  placeholder="Search"
-                  type="search"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
-            </form>
+              </form>
+            )}
           </div>
           <div className="ml-2 flex items-center space-x-4 sm:ml-6 sm:space-x-4">
             {/* Profile dropdown */}
@@ -82,8 +113,8 @@ const HeaderDashboard = ({ userNavigation, setMobileMenuOpen, handleSearch }) =>
                 {user.roles.admin
                   ? 'Admin'
                   : user.roles.chef
-                    ? 'Chef'
-                    : 'Mesera'}
+                  ? 'Chef'
+                  : 'Mesera'}
               </span>
             </div>
             <Menu as="div" className="relative flex-shrink-0">
@@ -96,8 +127,8 @@ const HeaderDashboard = ({ userNavigation, setMobileMenuOpen, handleSearch }) =>
                       user.roles.admin
                         ? AdminAvatar
                         : user.roles.chef
-                          ? ChefAvatar
-                          : MeseroAvatar
+                        ? ChefAvatar
+                        : MeseroAvatar
                     }
                     alt=""
                   />
@@ -118,7 +149,7 @@ const HeaderDashboard = ({ userNavigation, setMobileMenuOpen, handleSearch }) =>
                       {({ active }) => (
                         <Link
                           to={item.href}
-                          onClick={item.name === "Cerrar Sesión" && localStorage.clear()}
+                          onClick={item.name === 'Cerrar Sesión' && localStorage.clear()}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
                             'block px-4 py-2 text-sm text-gray-700'

@@ -9,24 +9,10 @@ import {
 import MenuDesktop from '../components/MenuDesktop';
 import MenuMobile from '../components/MenuMobile';
 import HeaderDashboard from '../components/HeaderDashboard';
-import { getProducts } from '../api/getProducts';
-import { MutatingDots } from 'react-loader-spinner';
-import GridCardsProducts from '../components/GridCardsProducts';
-import SideBarOrders from '../components/SideBarOrders';
-import Carousel from '../components/Carousel';
-
-const sidebarNavigation = [
-  { name: 'POS', href: '#', icon: BanknotesIcon, current: true },
-  { name: 'Usuarios', href: '#', icon: UserGroupIcon, current: false },
-  { name: 'Productos', href: '#', icon: Squares2X2Icon, current: false },
-  { name: 'Órdenes', href: '#', icon: RectangleStackIcon, current: false },
-  {
-    name: 'Reportes',
-    href: '#',
-    icon: PresentationChartBarIcon,
-    current: false,
-  },
-];
+import Pos from './sections/Pos';
+import Users from './sections/Users';
+import Products from './sections/Products';
+import Orders from './sections/Orders';
 
 const userNavigation = [
   { name: 'Mi Perfil', href: '#' },
@@ -44,14 +30,102 @@ const limitProducts = {
 const Dashboard = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [products, setProducts] = useState();
+  const [users, setUsers] = useState();
+  const [orders, setOrders] = useState();
   const [open, setOpen] = useState(false);
   const token = JSON.parse(localStorage.getItem('token'));
   const [width, setWidth] = useState(window.innerWidth);
   const [limit, setLimit] = useState();
   const [page, setPage] = useState(1);
   const [paginacion, setPaginacion] = useState({});
-  const [orders, setOrders] = useState(
+  const [actualOrders, setActualOrders] = useState(
     JSON.parse(localStorage.getItem('orders')) || []
+  );
+  const [type, setType] = useState('');
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState('');
+
+  const dataProducts = (response) => {
+    if (!response) {
+      setProducts([]);
+    } else {
+      setPaginacion(response);
+      setProducts(response.products);
+    }
+  };
+
+  const addOrders = (product) => {
+    const duplicado = actualOrders.find((order) => order._id === product._id);
+    if (!duplicado) {
+      const newProduct = {
+        ...product,
+        qty: 1,
+      };
+      setActualOrders([...actualOrders, newProduct]);
+    }
+  };
+
+  const changeQtyProduct = (id, qty) => {
+    const updatedOrders = actualOrders.map((order) => {
+      if (order._id === id) {
+        return { ...order, qty: qty };
+      }
+      return order;
+    });
+    setActualOrders(updatedOrders);
+  };
+
+  const removeOrder = (id) => {
+    const newOrders = actualOrders.filter((order) => order._id !== id);
+    setActualOrders(newOrders);
+  };
+
+  const clearOrders = () => {
+    setActualOrders([]);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [width]);
+
+  useEffect(() => {
+    if (actualOrders.length >= 0) {
+      localStorage.setItem('orders', JSON.stringify(actualOrders));
+    }
+  }, [actualOrders]);
+
+  const sidebarNavigation = [
+    {
+      name: 'POS',
+      icon: BanknotesIcon,
+      current: true,
+    },
+    {
+      name: 'Usuarios',
+      icon: UserGroupIcon,
+      current: false,
+    },
+    {
+      name: 'Productos',
+      icon: Squares2X2Icon,
+      current: false,
+    },
+    {
+      name: 'Ordenes',
+      icon: RectangleStackIcon,
+      current: false,
+    },
+    {
+      name: 'Reportes',
+      icon: PresentationChartBarIcon,
+      current: false,
+    },
+  ];
+
+  const [selectedTab, setSelectedTab] = useState(
+    sidebarNavigation.find((tab) => tab.current)
   );
 
   const handleResize = () => {
@@ -67,146 +141,82 @@ const Dashboard = () => {
     }
   };
 
-  const dataProducts = (response) => {
-    setPaginacion(response);
-    setProducts(response.products);
-  };
-
-  const addOrders = (product) => {
-    const duplicado = orders.find((order) => order._id === product._id);
-    if (!duplicado) {
-      const newProduct = {
-        ...product,
-        qty: 1,
-      }
-      setOrders([...orders, newProduct]);
-    }
-  };
-
-  const changeQtyProduct = (id, qty) => {
-    const updatedOrders = orders.map(order => {
-      if(order._id === id){
-        return { ...order, qty: qty };
-      }
-      return order;
-    });
-    setOrders(updatedOrders);
-  };
-
-  const removeOrder = (id) => {
-    const newOrders = orders.filter((order) => order._id !== id);
-    setOrders(newOrders);
-  };
-
-  const clearOrders = () => {
-    setOrders([]);
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    return () => window.removeEventListener('resize', handleResize);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width]);
-
-  useEffect(() => {
-    getProducts(token, limit, page).then((response) => dataProducts(response));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [limit, page]);
-
-  useEffect(() => {
-    if(orders.length >= 0){
-      localStorage.setItem("orders", JSON.stringify(orders));
-    }
-  }, [orders]);
-
   return (
     <>
       <div className="flex h-full">
-        <MenuDesktop sidebarNavigation={sidebarNavigation} />
+        <MenuDesktop
+          sidebarNavigation={sidebarNavigation}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
+        />
         <MenuMobile
           sidebarNavigation={sidebarNavigation}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
           mobileMenuOpen={mobileMenuOpen}
           setMobileMenuOpen={setMobileMenuOpen}
         />
-
         {/* Content area */}
         <div className="flex flex-1 flex-col overflow-hidden">
           <HeaderDashboard
             userNavigation={userNavigation}
             setMobileMenuOpen={setMobileMenuOpen}
             handleSearch={dataProducts}
+            limit={limit}
+            setType={setType}
+            search={search}
+            setSearch={setSearch}
+            labelSection={selectedTab.name !== "POS" ? "Lista de Registros" : undefined}
           />
-
-          <div className="flex flex-1 flex-col items-stretch overflow-hidden bg-background">
-            {!products ? (
-              <section className="flex flex-col flex-1 overflow-y-auto justify-center items-center">
-                <MutatingDots
-                  height="100"
-                  width="100"
-                  color="#7671D6"
-                  secondaryColor="#5751CD"
-                  radius="12.5"
-                  ariaLabel="mutating-dots-loading"
-                  wrapperStyle={{}}
-                  wrapperClass=""
-                  visible={true}
-                />
-                <h2 className="font-bold text-primary-500 text-lg">
-                  Cargando...
-                </h2>
-              </section>
-            ) : (
-              <main className="flex-1 overflow-y-auto">
-                {/* Primary column */}
-                <Carousel />
-                <section
-                  aria-labelledby="primary-heading"
-                  className="flex h-full min-w-0 flex-1 flex-col lg:order-last"
-                >
-                  {/* Your content */}
-                  <GridCardsProducts
-                    products={products}
-                    paginacion={paginacion}
-                    setPage={setPage}
-                    page={page}
-                    addOrders={addOrders}
-                  />
-                </section>
-              </main>
-            )}
-            {/* Secondary column (hidden on smaller screens) */}
-            <>
-              <button
-                type="button"
-                className="absolute py-20 px-1 sm:px-2 top-[50%] right-0 rounded-l-xl shadow-lg bg-primary-500 text-white hover:text-gray-300 focus:ring-2 focus:ring-primary-600"
-                onClick={() => {
-                  setOpen(!open);
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M13.28 3.97a.75.75 0 010 1.06L6.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5a.75.75 0 010-1.06l7.5-7.5a.75.75 0 011.06 0zm6 0a.75.75 0 010 1.06L12.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5a.75.75 0 010-1.06l7.5-7.5a.75.75 0 011.06 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-              <SideBarOrders
-                open={open}
-                setOpen={setOpen}
-                orders={orders}
-                removeOrder={removeOrder}
-                clearOrders={clearOrders}
-                changeQtyProduct={changeQtyProduct}
-              />
-            </>
-          </div>
+          {selectedTab.name === 'POS' ? (
+            <Pos
+              products={products}
+              limit={limit}
+              setType={setType}
+              setFilter={setFilter}
+              paginacion={paginacion}
+              setPage={setPage}
+              addOrders={addOrders}
+              setOpen={setOpen}
+              actualOrders={actualOrders}
+              removeOrder={removeOrder}
+              clearOrders={clearOrders}
+              changeQtyProduct={changeQtyProduct}
+              page={page}
+              open={open}
+              dataProducts={dataProducts}
+              filter={filter}
+              search={search}
+              type={type}
+              token={token}
+            />
+          ) : selectedTab.name === 'Usuarios' ? (
+            <Users
+              users={users}
+              token={token}
+              limit={limit}
+              page={page}
+              setUsers={setUsers}
+            />
+          ) : selectedTab.name === 'Productos' ? (
+            <Products
+              products={products}
+              token={token}
+              limit={limit}
+              page={page}
+              setProducts={setProducts}
+            />
+          ) : selectedTab.name === 'Ordenes' ? (
+            <Orders
+              orders={orders}
+              token={token}
+              limit={limit}
+              page={page}
+              setOrders={setOrders}
+            />
+          ) : (
+            <h1>Otro Componente</h1>
+          )}
         </div>
       </div>
     </>

@@ -14,11 +14,12 @@ import paletas from "../assets/paletas.png";
 import copas from "../assets/copas.png";
 import milkShakes from "../assets/milk-shakes.png";
 import granizados from "../assets/granizados.png";
+import { searchProducts } from '../api/searchProducts';
 
 const types = [
   {
     icon: conos,
-    name: 'Conos',
+    name: 'conos',
     color: 'bg-[#FE7493]',
   },
   {
@@ -38,17 +39,25 @@ const types = [
   },
   {
     icon: milkShakes,
-    name: 'Milk Shakes',
+    name: 'milk Shakes',
     color: 'bg-[#4FABF5]',
   },
   {
     icon: granizados,
-    name: 'Granizados',
+    name: 'granizados',
     color: 'bg-[#ef305d]',
   },
 ];
 
-const Carousel = () => {
+const Carousel = ({setFilter, handleFilter, limit, setType}) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  const handleFilterType = async(value) =>{
+    const filterData = await searchProducts(token, value, limit, 1, "types");
+    handleFilter(filterData);
+    setType("types");
+    setFilter(value);
+  };
 
   SwiperCore.use([Autoplay]);
   return (
@@ -82,7 +91,7 @@ const Carousel = () => {
       >
         {types.map((type, index) => (
           <SwiperSlide key={index}>
-            <div className={`flex justify-center items-center ${type.color} py-2 px-2 capitalize font-bold rounded-3xl`}>
+            <div onClick={() => handleFilterType(type.name)} className={`flex justify-center items-center ${type.color} py-2 px-2 capitalize font-bold rounded-3xl`}>
               <img src={type.icon} alt="icon-type-food" className='w-16' />
               <h1 className='text-white'>{type.name}</h1>
             </div>
