@@ -1,8 +1,7 @@
 import React from 'react';
-import CardProduct from './CardProduct';
-import Paginacion from './Paginacion';
-import './carousel.css';
-const GridCardsProducts = ({ products, paginacion, setPage, page, addOrders }) => {
+import CardOrder from './CardOrder';
+
+const GridCardsOrders = ({ orders }) => {
   return (
     <div className="mx-auto max-w-2xl py-4 px-4 sm:py-4 sm:px-6 lg:max-w-6xl lg:px-8 xl:max-w-[80rem] xl:px-8">
       <div className='flex justify-center sm:justify-start items-center gap-2'>
@@ -20,29 +19,26 @@ const GridCardsProducts = ({ products, paginacion, setPage, page, addOrders }) =
         </svg>
 
         <h3 className="text-md sm:text-lg font-bold text-dark">
-          Se encontraron <span className="text-primary-500">{paginacion.count}</span> de
-          productos
+          Se encontraron <span className="text-primary-500">8</span> de
+          órdenes
         </h3>
       </div>
       <section className="mt-4 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-4">
-        {products.map((product, index) => {
+        {orders.map((order, index) => {
           return (
             <div key={index}>
-              <CardProduct
-                name={product.name}
-                type={product.type}
-                image={product.image}
-                price={product.price}
-                product={product}
-                addOrders={addOrders}
+              <CardOrder
+                client={order.client}
+                dateEntry={order.dateEntry}
+                products={order.products}
+                status={order.status}
               />
             </div>
           )
         })}
       </section>
-      <Paginacion currentPage={page} totalPages={paginacion.pages} onPageChange={setPage}/>
     </div>
   );
 };
 
-export default GridCardsProducts;
+export default GridCardsOrders;

@@ -1,11 +1,21 @@
 import React from 'react';
 
-const ItemOrderSidebar = ({ id, image, name, qty, price, removeOrder, changeQtyProduct }) => {
+const ItemOrderSidebar = ({ 
+  id,
+  image,
+  name,
+  qty,
+  price,
+  removeOrder,
+  changeQtyProduct,
+  setTotal, }) => {
   const addQuantity = () => {
     qty < 9 && changeQtyProduct(id, qty + 1);
+    setTotal((price * qty).toFixed(2));
   };
   const lessQuantity = () => {
     qty > 1 && changeQtyProduct(id, qty - 1);
+    setTotal((price * qty).toFixed(2));
   };
 
   return (
@@ -44,20 +54,25 @@ const ItemOrderSidebar = ({ id, image, name, qty, price, removeOrder, changeQtyP
           </p>
         </div>
       </div>
-      <div className="flex justify-between items-center gap-2">
-        <button
-          onClick={() => lessQuantity()}
-          className="bg-primary-500 text-background px-1.5 rounded-md"
-        >
-          -
-        </button>
-        <span className="text-center w-4">{qty}</span>
-        <button
-          onClick={() => addQuantity()}
-          className="bg-primary-500 text-background px-1.5 rounded-md"
-        >
-          +
-        </button>
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex justify-between items-center gap-2">
+          <button
+            onClick={() => lessQuantity()}
+            className="bg-primary-500 text-background px-1.5 rounded-md"
+          >
+            -
+          </button>
+          <span className="text-center w-4">{qty}</span>
+          <button
+            onClick={() => addQuantity()}
+            className="bg-primary-500 text-background px-1.5 rounded-md"
+          >
+            +
+          </button>
+        </div>
+        <span className="text-xs font-medium text-primary-500">
+          S/.{(price * qty).toFixed(2)}
+        </span>
       </div>
     </div>
   );

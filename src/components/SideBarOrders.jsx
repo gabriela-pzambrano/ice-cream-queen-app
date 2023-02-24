@@ -5,25 +5,37 @@ import Input from '../components/Input';
 import ItemOrderSidebar from './ItemOrderSidebar';
 import { createOrder } from '../api/createOrder';
 
-const SideBarOrders = ({ open, setOpen, orders, removeOrder, clearOrders, changeQtyProduct }) => {
+const SideBarOrders = ({ 
+  open,
+  setOpen,
+  actualOrders,
+  removeOrder,
+  clearOrders,
+  changeQtyProduct, }) => {
   const user = JSON.parse(localStorage.getItem('user'));
-  const token = JSON.parse(localStorage.getItem("token"));
-  const [clientName, setClientName] = useState("");
+  const token = JSON.parse(localStorage.getItem('token'));
+  const [clientName, setClientName] = useState('');
   const handleChange = (e) => {
     setClientName(e.target.value);
   };
+  const total = actualOrders
+    .reduce((acc, item) => (acc += item.price * item.qty), 0)
+    .toFixed(2);
 //userId - client - products[{qty: 0 , productId}];
   const submitOrder = () => {
-    const products = orders.map((order) => {return {qty: order.qty , productId: order._id}});
+    const products = actualOrders.map((order) => {
+      return { qty: order.qty, productId: order._id };
+    });
     const objectOrder = {
       userId: user._id,
       client: clientName,
-      products: products
-    }
+      products: products,
+    };
     createOrder(token, objectOrder);
-    clearOrders();
-    setClientName("");
-    
+    setTimeout(() => {
+      clearOrders();
+      setClientName('');
+    }, 1000);
   };
 
   return (
@@ -86,8 +98,9 @@ const SideBarOrders = ({ open, setOpen, orders, removeOrder, clearOrders, change
                         value={clientName}
                       />
                     </div>
+                    
                     <ul className="flex-1 divide-y divide-gray-200 overflow-y-auto">
-                      {orders?.map((order, index) => (
+                      {actualOrders?.map((order, index) => (
                         <li key={index}>
                           <ItemOrderSidebar
                             id={order._id}
@@ -101,6 +114,14 @@ const SideBarOrders = ({ open, setOpen, orders, removeOrder, clearOrders, change
                         </li>
                       ))}
                     </ul>
+                    <div className="flex justify-between border-gray-300 border-y-2 py-4 px-8">
+                      <h3 className="font-medium text-dark opacity-80">
+                        Total de Venta:
+                      </h3>
+                      <h3 className="font-semibold text-primary-500">
+                        S/. {total}
+                      </h3>
+                    </div>
                     <div className="flex items-center justify-center w-full p-4 gap-2">
                       <button
                         onClick={() => clearOrders()}
