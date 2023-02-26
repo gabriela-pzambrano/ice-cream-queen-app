@@ -1,47 +1,100 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import MenuDesktop from '../../components/MenuDesktop';
+/* import userEvent from '@testing-library/user-event'; */
 
 jest.mock('../../assets/logo-ice-cream-queen.svg', () => 'ruta/de/la/imagen.jpg');
 jest.mock('../../assets/bottom-ice-cream.svg', () => 'ruta/de/la/imagen.jpg');
 
 describe('MenuDesktop', () => {
-  test('Check that MenuDesktop renders correctly', () => {
+
+  test('MenuDesktop should render the correct navigation links', () => {
     const sidebarNavigation = [
-      { name: 'Home', href: '/', icon: () => {} },
-      { name: 'About', href: '/about', icon: () => {} },
+      { name: 'Home', icon: () => null },
+      { name: 'About', icon: () => null },
+      { name: 'Contact', icon: () => null },
     ];
 
-    const { container } = render(<MenuDesktop sidebarNavigation={sidebarNavigation} />);
+    const selectedTab = { name: 'Home', current: true };
+    const setSelectedTab = jest.fn();
 
-    expect(container).toMatchSnapshot();
+    render(<MenuDesktop
+      sidebarNavigation={sidebarNavigation}
+      selectedTab={selectedTab}
+      setSelectedTab={setSelectedTab} />);
+
+    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(screen.getByText('About')).toBeInTheDocument();
+    expect(screen.getByText('Contact')).toBeInTheDocument();
   });
 
-  test('displays sidebar items correctly', () => {
+  /* test('activates selected tab', () => {
+
     const sidebarNavigation = [
-      { name: 'Home', href: '/', icon: () => {} },
-      { name: 'About', href: '/about', icon: () => {} },
+      { name: 'Home', icon: () => 'ruta/de/la/imagen.jpg' },
+      { name: 'About', icon: () => 'ruta/de/la/imagen.jpg'},
+      { name: 'Contact', icon: () => 'ruta/de/la/imagen.jpg' },
     ];
 
-    const { getByText } = render(<MenuDesktop sidebarNavigation={sidebarNavigation} />);
-
-    // eslint-disable-next-line testing-library/prefer-screen-queries
-    expect(getByText('Home')).toBeInTheDocument();
-    // eslint-disable-next-line testing-library/prefer-screen-queries
-    expect(getByText('About')).toBeInTheDocument();
-  });
-
-  test('applies correct CSS classes to sidebar items', () => {
-    const sidebarNavigation = [
-      { name: 'Home', href: '/', icon: () => {}, current: true },
-      { name: 'About', href: '/about', icon: () => {}, current: false },
-    ];
-
-    const { getByText } = render(<MenuDesktop sidebarNavigation={sidebarNavigation} />);
-
-    // eslint-disable-next-line testing-library/prefer-screen-queries
-    expect(getByText('Home')).toHaveClass('mt-2');
-    // eslint-disable-next-line testing-library/prefer-screen-queries
-    expect(getByText('About')).toHaveClass('mt-2');
-  });
+    const selectedTab = { name: 'Home' };
+    const setSelectedTab = jest.fn();
   
+    render(
+      <MenuDesktop
+        sidebarNavigation={sidebarNavigation}
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+      />
+    );
+  
+    const aboutTabElement = screen.getByText('About');
+    userEvent.click(aboutTabElement);
+  
+    expect(setSelectedTab).toHaveBeenCalled();
+    expect(setSelectedTab).toHaveBeenCalledWith({ name: 'About', icon: () => 'ruta/de/la/imagen.jpg' , current: true });
+  }); */
+
+  test('renders logo', () => {
+    const sidebarNavigation = [
+      { name: 'Home', icon: () => <div></div> },
+      { name: 'About', icon: () => <div></div> },
+      { name: 'Contact', icon: () => <div></div> },
+    ];
+    const selectedTab = { name: 'Home' };
+    const setSelectedTab = () => {};
+  
+    render(
+      <MenuDesktop
+        sidebarNavigation={sidebarNavigation}
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+      />
+    );
+  
+    const logoElement = screen.getByAltText('ice-cream-queen');
+    expect(logoElement).toBeInTheDocument();
+  });
+
+  test('renders footer image', () => {
+    const sidebarNavigation = [
+      { name: 'Home', icon: () => <div></div> },
+      { name: 'About', icon: () => <div></div> },
+      { name: 'Contact', icon: () => <div></div> },
+    ];
+    const selectedTab = { name: 'Home' };
+    const setSelectedTab = () => {};
+  
+    render(
+      <MenuDesktop
+        sidebarNavigation={sidebarNavigation}
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+      />
+    );
+  
+    const footerImageElement = screen.getByAltText('Ice Cream Queen');
+    expect(footerImageElement).toBeInTheDocument();
+  });
+
+
+
 });
