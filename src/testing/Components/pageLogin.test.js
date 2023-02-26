@@ -10,15 +10,6 @@ jest.mock('../../assets/back-top-ice-cream-mobile.svg', () => 'ruta/de/la/imagen
 jest.mock('../../assets/back-top-ice-cream-tablet.svg', () => 'ruta/de/la/imagen.jpg');
 jest.mock('../../assets/background-ice.svg', () => 'ruta/de/la/imagen.jpg');
 
-/*describe('Component Login Page', () => {
-    test('renders login form', () => {
-        render(<MemoryRouter><Login /></MemoryRouter>);
-        const loginForm = screen.getByRole('form');
-        expect(loginForm).toBeInTheDocument();
-    });
-});
- */
-
 describe("Login component", () => {
     test("renders the welcome text", () => {
         render(<MemoryRouter><Login /></MemoryRouter>);
@@ -37,10 +28,4 @@ describe("Login component", () => {
         const backgroundImage = screen.getByAltText(/background-top-ice-cream/i);
         expect(backgroundImage).toBeInTheDocument();
     });
-
-    /* test("renders the login form", () => {
-        render(<MemoryRouter><Login /></MemoryRouter>);
-        const loginForm = screen.getByRole("form");
-        expect(loginForm).toBeInTheDocument();
-    }); */
 });

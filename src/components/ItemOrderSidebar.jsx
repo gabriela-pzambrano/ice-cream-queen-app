@@ -7,15 +7,13 @@ const ItemOrderSidebar = ({
   qty,
   price,
   removeOrder,
-  changeQtyProduct,
-  setTotal, }) => {
+  changeQtyProduct
+ }) => {
   const addQuantity = () => {
     qty < 9 && changeQtyProduct(id, qty + 1);
-    setTotal((price * qty).toFixed(2));
   };
   const lessQuantity = () => {
     qty > 1 && changeQtyProduct(id, qty - 1);
-    setTotal((price * qty).toFixed(2));
   };
 
   return (
