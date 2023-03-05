@@ -19,10 +19,9 @@ const MenuDesktop = ({sidebarNavigation, selectedTab, setSelectedTab}) => {
           <img className="h-12 w-auto" src={logo} alt="ice-cream-queen" />
         </div>
         <div className="mt-6 w-full flex-1 space-y-1 px-2">
-          {sidebarNavigation.map((link) => (
+          {sidebarNavigation.filter((item) => item.show).map((link) => (
             <span
               key={link.name}
-
               className={classNames(
                 selectedTab.name === link.name
                   ? 'bg-primary-800 text-white'

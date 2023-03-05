@@ -46,10 +46,9 @@ const types = {
   },
 };
 
-const CardProduct = ({ keyProduct, name, type, image, price, product, addOrders }) => {
+const CardProduct = ({name, type, image, price, product, addOrders }) => {
   return (
     <section
-      key={keyProduct}
       className={classNames(
         types[type].border,
         'flex flex-col gap-2 border-b-2 bg-white rounded-2xl w-72 p-2 shadow-md sm:w-[230px] relative overflow-hidden'

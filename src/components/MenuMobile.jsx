@@ -11,7 +11,14 @@ const MenuMobile = ({
   sidebarNavigation,
   mobileMenuOpen,
   setMobileMenuOpen,
+  selectedTab,
+  setSelectedTab
 }) => {
+  const handleActive = (link) => {
+    //console.log(link)
+    link.current = true;
+    setSelectedTab(link);
+  };
   return (
     <Transition.Root show={mobileMenuOpen} as={Fragment}>
       <Dialog
@@ -71,29 +78,29 @@ const MenuMobile = ({
               <div className="mt-5 h-0 flex-1 overflow-y-auto px-2">
                 <nav className="flex h-full flex-col">
                   <div className="space-y-1">
-                    {sidebarNavigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
+                    {sidebarNavigation.map((link) => (
+                      <span
+                        key={link.name}
                         className={classNames(
-                          item.current
+                          selectedTab.name === link.name
                             ? 'bg-primary-800 text-white'
                             : 'text-primary-100 hover:bg-primary-800 hover:text-white',
                           'group py-2 px-3 rounded-md flex items-center text-sm font-medium'
                         )}
-                        aria-current={item.current ? 'page' : undefined}
+                        aria-current={link.current ? 'page' : undefined}
+                        onClick={() => handleActive(link)}
                       >
-                        <item.icon
+                        <link.icon
                           className={classNames(
-                            item.current
+                            selectedTab.name === link.name
                               ? 'text-white'
                               : 'text-primary-300 group-hover:text-white',
                             'mr-3 h-6 w-6'
                           )}
                           aria-hidden="true"
                         />
-                        <span>{item.name}</span>
-                      </a>
+                        <span>{link.name}</span>
+                      </span>
                     ))}
                   </div>
                 </nav>

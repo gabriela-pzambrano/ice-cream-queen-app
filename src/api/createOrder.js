@@ -9,7 +9,7 @@ export const createOrder = async (token, order) => {
         }
         await axios.post(`${API_URL}/orders`, order, config);
         toast.success("Se creo la órden correctamente");
-        return "La órden se creo correctamente"
+        return "La órden se creo correctamente";
     } catch (error) {
         toast.error(error.response.data.error);
     }

@@ -10,7 +10,6 @@ export const searchProducts = async (token, value, limit, page, type) => {
       `${API_URL}/products/${type}?${type}=${value}&page=${page}&limit=${limit || 12}`,
       config
     );
-    console.log(products);
     return products.data;
   } catch (error) {
     console.log(error.response.data.error);

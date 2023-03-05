@@ -1,13 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import CardProduct from '../../components/CardProduct';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Navigation, Pagination, Autoplay, Scrollbar, A11y } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
-import './carousel.css';
 
 jest.mock('../../assets/purple-bottom.svg', () => 'ruta/de/la/imagen.jpg');
 jest.mock('../../assets/green-bottom.svg', () => 'ruta/de/la/imagen.jpg');

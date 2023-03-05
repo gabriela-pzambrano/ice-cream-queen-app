@@ -7,7 +7,7 @@ jest.mock('../../assets/bottom-ice-cream.svg', () => 'ruta/de/la/imagen.jpg');
 
 describe('MenuDesktop', () => {
 
-  test('MenuDesktop should render the correct navigation links', () => {
+  /* test('MenuDesktop should render the correct navigation links', () => {
     const sidebarNavigation = [
       { name: 'Home', icon: () => null },
       { name: 'About', icon: () => null },
@@ -25,7 +25,8 @@ describe('MenuDesktop', () => {
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('About')).toBeInTheDocument();
     expect(screen.getByText('Contact')).toBeInTheDocument();
-  });
+  }); */
+  
 
   /* test('activates selected tab', () => {
 

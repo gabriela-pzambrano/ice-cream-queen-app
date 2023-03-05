@@ -15,9 +15,9 @@ import Products from './sections/Products';
 import Orders from './sections/Orders';
 
 const userNavigation = [
-  { name: 'Mi Perfil', href: '#' },
-  { name: 'Configuración', href: '#' },
-  { name: 'Cerrar Sesión', href: '/' },
+  { id:1, name: 'Mi Perfil' },
+  { id:2, name: 'Configuración' },
+  { id:3, name: 'Cerrar Sesión' },
 ];
 
 const limitProducts = {
@@ -34,9 +34,15 @@ const Dashboard = () => {
   const [orders, setOrders] = useState();
   const [open, setOpen] = useState(false);
   const token = JSON.parse(localStorage.getItem('token'));
+  const user = JSON.parse(localStorage.getItem("user"));
   const [width, setWidth] = useState(window.innerWidth);
   const [limit, setLimit] = useState();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState({
+    orders: 1,
+    pos: 1,
+    products: 1,
+    users: 1
+  });
   const [paginacion, setPaginacion] = useState({});
   const [actualOrders, setActualOrders] = useState(
     JSON.parse(localStorage.getItem('orders')) || []
@@ -83,6 +89,7 @@ const Dashboard = () => {
   const clearOrders = () => {
     setActualOrders([]);
   };
+
   useEffect(() => {
     window.addEventListener('resize', handleResize);
     handleResize();
@@ -95,32 +102,38 @@ const Dashboard = () => {
       localStorage.setItem('orders', JSON.stringify(actualOrders));
     }
   }, [actualOrders]);
+  // user.roles.admin = true  | user.roles.cocina = true
 
   const sidebarNavigation = [
     {
       name: 'POS',
       icon: BanknotesIcon,
       current: true,
+      show: true,
     },
     {
       name: 'Usuarios',
       icon: UserGroupIcon,
       current: false,
+      show: user.roles.admin,
     },
     {
       name: 'Productos',
       icon: Squares2X2Icon,
       current: false,
+      show: true,
     },
     {
       name: 'Ordenes',
       icon: RectangleStackIcon,
       current: false,
+      show: user.roles.admin || user.roles.cocina,
     },
     {
       name: 'Reportes',
       icon: PresentationChartBarIcon,
       current: false,
+      show: user.roles.admin,
     },
   ];
 
@@ -197,6 +210,9 @@ const Dashboard = () => {
               limit={limit}
               page={page}
               setUsers={setUsers}
+              paginacion={paginacion}
+              setPaginacion={setPaginacion}
+              setPage={setPage}
             />
           ) : selectedTab.name === 'Productos' ? (
             <Products
@@ -205,6 +221,13 @@ const Dashboard = () => {
               limit={limit}
               page={page}
               setProducts={setProducts}
+              paginacion={paginacion}
+              setPage={setPage}
+              setPaginacion={setPaginacion}
+              dataProducts={dataProducts}
+              type={type}
+              setType={setType}
+              handleSearch={dataProducts}
             />
           ) : selectedTab.name === 'Ordenes' ? (
             <Orders
@@ -213,6 +236,9 @@ const Dashboard = () => {
               limit={limit}
               page={page}
               setOrders={setOrders}
+              paginacion={paginacion}
+              setPaginacion={setPaginacion}
+              setPage={setPage}
             />
           ) : (
             <h1>Otro Componente</h1>

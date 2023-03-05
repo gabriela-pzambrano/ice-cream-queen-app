@@ -3,15 +3,17 @@ import { MutatingDots } from 'react-loader-spinner';
 import { getOrders } from '../../api/getOrders';
 import GridCardsOrders from '../../components/GridCardsOrders';
 
-const Orders = ({ orders, setOrders, token, limit, page }) => {
+const Orders = ({ orders, setOrders, token, limit, page, setPage, paginacion, setPaginacion }) => {
+
   const dataOrders = (response) => {
-    setOrders(response.orders);
+    setPaginacion(response);
+    setOrders(response);
   };
 
   useEffect(() => {
-    getOrders(token, limit, page).then((response) => dataOrders(response));
+    getOrders(token, limit, page.orders).then((response) => dataOrders(response));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [limit, page]);
+  }, [limit, page.orders]);
 
   return (
     <>
@@ -33,7 +35,7 @@ const Orders = ({ orders, setOrders, token, limit, page }) => {
           </section>
         ) : (
           <main className="flex-1 overflow-y-auto">
-            <GridCardsOrders orders={orders}/>
+            <GridCardsOrders orders={orders} page={page} setPage={setPage} paginacion={paginacion} />
           </main>
         )}
       </div>
