@@ -1,17 +1,61 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { MutatingDots } from 'react-loader-spinner';
+import { deleteProduct } from '../../api/deleteProduct';
 import { getProducts } from '../../api/getProducts';
+import { searchProducts } from '../../api/searchProducts';
 import TableProducts from '../../components/TableProducts';
 
-const Products = ({products, token, limit, page, setProducts}) => {
-  const dataProducts = (response) => {
-    setProducts(response.products);
+const Products = ({products, token, limit, page, setPage, paginacion,  dataProducts, type, setType}) => {
+  const [search, setSearch] = useState();
+  const [refresh, setRefresh] = useState();
+  const handleSubmit = async () => {
+    const searchData = await searchProducts(token, search, limit, 1, 'search');
+    dataProducts(searchData);
+    setType('search');
+  };
+
+  const refreshProducts = () => {
+    setRefresh(true);
+    setPage({
+      ...page,
+      products: 1,
+    });
+  };
+
+  const productDelete = (id) => {
+    deleteProduct(token, id);
+    setRefresh(true);
+    setPage({
+      ...page,
+      products: 1,
+    });
+  }
+
+  const handleKeyDown = async (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      await handleSubmit();
+    }
+  };
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setSearch(e.target.value);
   };
 
   useEffect(() => {
-    getProducts(token, limit, page).then((response) => dataProducts(response));
+    getProducts(token, limit, page.products, type).then((response) => dataProducts(response));
+    setRefresh(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [limit, page]);
+  }, [limit, page.products, refresh]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   return (
     <>
@@ -33,7 +77,7 @@ const Products = ({products, token, limit, page, setProducts}) => {
           </section>
         ) : (
           <main className="flex-1 overflow-y-auto">
-            <TableProducts products={products} />
+            <TableProducts products={products} page={page} setPage={setPage} paginacion={paginacion} handleChange={handleChange} refresh={refreshProducts} deleteProduct={productDelete} />
           </main>
         )}
       </div>

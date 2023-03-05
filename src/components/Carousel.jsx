@@ -39,7 +39,7 @@ const types = [
   },
   {
     icon: milkShakes,
-    name: 'milk Shakes',
+    name: 'milk shakes',
     color: 'bg-[#4FABF5]',
   },
   {
@@ -49,7 +49,7 @@ const types = [
   },
 ];
 
-const Carousel = ({setFilter, handleFilter, limit, setType}) => {
+const Carousel = ({setFilter, handleFilter, limit, setType, page, setPage}) => {
   const token = JSON.parse(localStorage.getItem("token"));
 
   const handleFilterType = async(value) =>{
@@ -57,6 +57,10 @@ const Carousel = ({setFilter, handleFilter, limit, setType}) => {
     handleFilter(filterData);
     setType("types");
     setFilter(value);
+    setPage({
+      ...page,
+      pos: 1,
+    });
   };
 
   SwiperCore.use([Autoplay]);

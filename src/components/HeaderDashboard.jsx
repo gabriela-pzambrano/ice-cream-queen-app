@@ -5,8 +5,9 @@ import { Menu, Transition } from '@headlessui/react';
 import AdminAvatar from '../assets/admin.svg';
 import ChefAvatar from '../assets/cocina.svg';
 import MeseroAvatar from '../assets/mesero.svg';
-import { Link } from 'react-router-dom';
 import { searchProducts } from '../api/searchProducts';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -20,9 +21,10 @@ const HeaderDashboard = ({
   handleSearch,
   limit,
   setType,
-  labelSection, }) => {
+  labelSection }) => {
   const user = JSON.parse(localStorage.getItem('user'));
   const token = JSON.parse(localStorage.getItem('token'));
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     const searchData = await searchProducts(token, search, limit, 1, 'search');
@@ -37,6 +39,14 @@ const HeaderDashboard = ({
     }
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    toast.success("Cerrando Sesión...");
+    setTimeout(()=>{
+      navigate("/");
+    }, 2000);
+  }
+
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => {
@@ -46,7 +56,7 @@ const HeaderDashboard = ({
   }, [search]);
 
   return (
-    <header className="w-full">
+    <header className="w-full z-20">
       <div className="relative z-10 flex h-16 flex-shrink-0 border-b border-gray-200 bg-white shadow-sm">
         <button
           type="button"
@@ -112,8 +122,8 @@ const HeaderDashboard = ({
               <span className="bg-primary-500 py-1 px-2 text-xs text-white font-semibold rounded-md">
                 {user.roles.admin
                   ? 'Admin'
-                  : user.roles.chef
-                  ? 'Chef'
+                  : user.roles.cocina
+                  ? 'Cocina'
                   : 'Mesera'}
               </span>
             </div>
@@ -126,7 +136,7 @@ const HeaderDashboard = ({
                     src={
                       user.roles.admin
                         ? AdminAvatar
-                        : user.roles.chef
+                        : user.roles.cocina
                         ? ChefAvatar
                         : MeseroAvatar
                     }
@@ -147,16 +157,15 @@ const HeaderDashboard = ({
                   {userNavigation.map((item) => (
                     <Menu.Item key={item.name}>
                       {({ active }) => (
-                        <Link
-                          to={item.href}
-                          onClick={item.name === 'Cerrar Sesión' && localStorage.clear()}
+                        <button
+                          onClick={() => item.id === 3 ? handleLogout() : null}
                           className={classNames(
                             active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700'
+                            'block px-4 py-2 text-sm text-gray-700 w-full text-left' 
                           )}
                         >
                           {item.name}
-                        </Link>
+                        </button>
                       )}
                     </Menu.Item>
                   ))}

@@ -31,20 +31,20 @@ const Pos = ({
 
   useEffect(() => {
     if (type === 'search') {
-      searchProducts(token, search, limit, page, type).then((response) =>
+      searchProducts(token, search, limit, page.pos, type).then((response) =>
         dataProducts(response)
       );
     } else if (type === 'types') {
-      searchProducts(token, filter, limit, page, type).then((response) =>
+      searchProducts(token, filter, limit, page.pos, type).then((response) =>
         dataProducts(response)
       );
     } else {
-      getProducts(token, limit, page).then((response) =>
+      getProducts(token, limit, page.pos).then((response) =>
         dataProducts(response)
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [limit, page]);
+  }, [limit, page.pos]);
 
   return (
     <div className="flex flex-1 flex-col items-stretch overflow-hidden bg-background">
@@ -71,6 +71,8 @@ const Pos = ({
             limit={limit}
             setType={setType}
             setFilter={setFilter}
+            setPage={setPage}
+            page={page}
           />
           <section
             aria-labelledby="primary-heading"
