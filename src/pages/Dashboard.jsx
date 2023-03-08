@@ -13,6 +13,8 @@ import Pos from './sections/Pos';
 import Users from './sections/Users';
 import Products from './sections/Products';
 import Orders from './sections/Orders';
+import Reports from './sections/Reports';
+
 
 const userNavigation = [
   { id:1, name: 'Mi Perfil' },
@@ -241,7 +243,7 @@ const Dashboard = () => {
               setPage={setPage}
             />
           ) : (
-            <h1>Otro Componente</h1>
+            <Reports token={token}/>
           )}
         </div>
       </div>

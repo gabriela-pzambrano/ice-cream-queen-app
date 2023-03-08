@@ -1,15 +1,23 @@
 import { useEffect, useState } from 'react';
 import { MutatingDots } from 'react-loader-spinner';
 import { deleteUser } from '../../api/deleteUser';
+/* import { updateUser } from '../../api/updateUser'; */
 import { getUsers } from '../../api/getUsers';
 import { searchUsers } from '../../api/searchUsers';
 import TableUsers from '../../components/TableUsers';
 import ModalCreate from '../../components/ModalCreate';
+import ModalUpdate from '../../components/ModalUpdate';
 
 const Users = ({users, setUsers, token, limit, page, setPage, paginacion, setPaginacion }) => {
+  const nameComponent = 'Usuario'
+
   const [email, setEmail] = useState();
   const [refresh, setRefresh] = useState();
   const [open, setOpen] = useState(false);
+
+  const [openUpdate, setOpenUpdate] = useState(false);
+
+
   const dataUsers = (response) => {
     setPaginacion(response);
     setUsers(response.users);
@@ -37,6 +45,12 @@ const Users = ({users, setUsers, token, limit, page, setPage, paginacion, setPag
       users: 1,
     });
   }
+
+  //modificar rol usuario:
+  /* const userUpdate = (id) => {
+    updateUser(token, id);
+    setRefresh(true);
+  } */
 
   const handleKeyDown = async (e) => {
     if (e.key === 'Enter') {
@@ -67,7 +81,8 @@ const Users = ({users, setUsers, token, limit, page, setPage, paginacion, setPag
 
   return (
     <>
-    <ModalCreate open={open} setOpen={setOpen} token={token} setPage={setPage} page={page}/>
+    <ModalCreate open={open} setOpen={setOpen} token={token} setPage={setPage} page={page} nameComponent={nameComponent}/>
+    <ModalUpdate openUpdate={openUpdate} setOpenUpdate={setOpenUpdate} token={token} setPage={setPage} page={page} nameComponent={nameComponent} /* userUpdate={userUpdate} *//>
       <div className="flex flex-1 flex-col items-stretch overflow-hidden bg-background">
         {!users ? (
           <section className="flex flex-col flex-1 overflow-y-auto justify-center items-center">
@@ -86,7 +101,7 @@ const Users = ({users, setUsers, token, limit, page, setPage, paginacion, setPag
           </section>
         ) :  (
           <main className="flex-1 overflow-y-auto">
-            <TableUsers users={users} page={page} setPage={setPage} paginacion={paginacion} handleChange={handleChange} refresh={refreshUsers} deleteUser={userDelete} setOpen={setOpen}/>
+            <TableUsers users={users} page={page} setPage={setPage} paginacion={paginacion} handleChange={handleChange} refresh={refreshUsers} deleteUser={userDelete} setOpen={setOpen} setOpenUpdate={setOpenUpdate} />
           </main>
           )
         }

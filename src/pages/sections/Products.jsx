@@ -4,10 +4,18 @@ import { deleteProduct } from '../../api/deleteProduct';
 import { getProducts } from '../../api/getProducts';
 import { searchProducts } from '../../api/searchProducts';
 import TableProducts from '../../components/TableProducts';
+import ModalCreate from '../../components/ModalCreate';
+import ModalUpdate from '../../components/ModalUpdate';
 
 const Products = ({products, token, limit, page, setPage, paginacion,  dataProducts, type, setType}) => {
+  const nameComponent = 'producto';
+
   const [search, setSearch] = useState();
   const [refresh, setRefresh] = useState();
+  const [open, setOpen] = useState(false);
+
+  const [openUpdate, setOpenUpdate] = useState(false);
+
   const handleSubmit = async () => {
     const searchData = await searchProducts(token, search, limit, 1, 'search');
     dataProducts(searchData);
@@ -59,6 +67,8 @@ const Products = ({products, token, limit, page, setPage, paginacion,  dataProdu
 
   return (
     <>
+    <ModalCreate open={open} setOpen={setOpen} token={token} setPage={setPage} page={page} nameComponent={nameComponent}/>
+    <ModalUpdate openUpdate={openUpdate} setOpenUpdate={setOpenUpdate}/>
       <div className="flex flex-1 flex-col items-stretch overflow-hidden bg-background">
         {!products ? (
           <section className="flex flex-col flex-1 overflow-y-auto justify-center items-center">
@@ -77,7 +87,7 @@ const Products = ({products, token, limit, page, setPage, paginacion,  dataProdu
           </section>
         ) : (
           <main className="flex-1 overflow-y-auto">
-            <TableProducts products={products} page={page} setPage={setPage} paginacion={paginacion} handleChange={handleChange} refresh={refreshProducts} deleteProduct={productDelete} />
+            <TableProducts products={products} page={page} setPage={setPage} paginacion={paginacion} handleChange={handleChange} refresh={refreshProducts} deleteProduct={productDelete} setOpen={setOpen} setOpenUpdate={setOpenUpdate}/>
           </main>
         )}
       </div>

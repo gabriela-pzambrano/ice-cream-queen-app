@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { changeStatusOrder } from '../api/changeStatusOrder';
-import imgPending from '../assets/back-order.svg';
-import imgDelivered from '../assets/back-order-del.svg';
+/* import imgPending from '../assets/back-order.svg';
+import imgDelivered from '../assets/back-order-del.svg'; */
 import SelectOrder from './SelectOrder';
 
 function classNames(...classes) {
@@ -22,9 +22,9 @@ const CardOrder = ({ id, client, dateEntry, products, status }) => {
       <section
         className={`${
           newStatus ? 'bg-secondary-500' : 'bg-primary-500'
-        } w-full flex items-center justify-around relative h-8`}
+        } w-full flex items-center justify-around relative h-10`}
       >
-        {newStatus ? (
+        {/* {newStatus ? (
           <img
             src={imgDelivered}
             alt={'bottom-ice-cream'}
@@ -36,15 +36,15 @@ const CardOrder = ({ id, client, dateEntry, products, status }) => {
             alt={'bottom-ice-cream'}
             className="w-full absolute bottom-[-1.8rem]"
           />
-        )}
-        <h3 className="text-background capitalize font-bold text-md sm:text-[15px] pt-3 pb-1">
+        )} */}
+        <h3 className="text-background capitalize font-bold text-md sm:text-[15px] pt-3 pb-3">
           {new Date(dateEntry).toLocaleString('es-ES', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',
           })}
         </h3>
-        <h3 className="text-background capitalize font-bold text-md sm:text-[15px] pt-3 pb-1">
+        <h3 className="text-background capitalize font-bold text-md sm:text-[15px] pt-3 pb-3">
           {new Date(dateEntry).toLocaleString('es-ES', {
             hour: '2-digit',
             minute: '2-digit',
