@@ -3,6 +3,7 @@ import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import Input from './Input';
 import { createUser } from '../api/createUser';
+import { createProduct } from '../api/createProduct';
 
 const ModalCreate = ({ open, setOpen, token, setPage, page, nameComponent }) => {
   const cancelButtonRef = useRef(null);
@@ -12,6 +13,10 @@ const ModalCreate = ({ open, setOpen, token, setPage, page, nameComponent }) => 
     email: '',
     password: '',
     rol: 'Mesero',
+    name: '',
+    price: 0,
+    image: '',
+    type: ''
   };
 
   const [input, setInput] = useState(initialValues); // estado
@@ -25,22 +30,40 @@ const ModalCreate = ({ open, setOpen, token, setPage, page, nameComponent }) => 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newUser = {
-      email: input.email,
-      password: input.password,
-      roles: {
-        admin: input.rol === 'Administrador',
-        cocina: input.rol === 'Chef',
-      },
-    };
-    createUser(token, newUser);
-    setTimeout(() => {
-      setPage({
-        ...page,
-        users: 1,
-      });
-      setOpen(false);
-    }, 1000);
+    if (nameComponent === "users") {
+      const newUser = {
+        email: input.email,
+        password: input.password,
+        roles: {
+          admin: input.rol === 'Administrador',
+          cocina: input.rol === 'Chef',
+        },
+      };
+      createUser(token, newUser);
+      setTimeout(() => {
+        setPage({
+          ...page,
+          users: 1,
+        });
+        setOpen(false);
+      }, 1000);
+    }
+    else {
+      const newProduct = {
+        name: input.name,
+        price: input.price,
+        image: input.image,
+        type: (input.type).toLowerCase()
+      };
+      createProduct(token, newProduct);
+      setTimeout(() => {
+        setPage({
+          ...page,
+          products: 1,
+        });
+        setOpen(false);
+      }, 1000);
+    }
   };
 
   return (
@@ -99,12 +122,12 @@ const ModalCreate = ({ open, setOpen, token, setPage, page, nameComponent }) => 
                           as="h3"
                           className="text-base font-semibold leading-6 text-primary-700"
                         >
-                          Crear {nameComponent}
+                          Crear {nameComponent === "users" ? "Usuarios" : "Productos"}
                           <p className="text-sm text-gray-500">
-                            Para añadir un {nameComponent} nuevo complete los siguientes campos.
+                            Para añadir un {nameComponent === "users" ? "usuario" : "producto"} nuevo complete los siguientes campos.
                           </p>
                         </Dialog.Title>
-                        {nameComponent === "Usuario" ? (
+                        {nameComponent === "users" ? (
                           <>
                             <div className="mt-3">
                               <Input
@@ -173,14 +196,14 @@ const ModalCreate = ({ open, setOpen, token, setPage, page, nameComponent }) => 
                           </div>
                           <div className="mt-1 ">
                             <label
-                              htmlFor="rol"
+                              htmlFor="type"
                               className="block text-sm font-medium text-dark"
                             >
-                              Type de helado:
+                              Tipo de helado:
                             </label>
                             <select
-                              id="rol"
-                              name="rol"
+                              id="type"
+                              name="type"
                               className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                               onChange={handleChange}
                               value={input.type}
@@ -204,7 +227,7 @@ const ModalCreate = ({ open, setOpen, token, setPage, page, nameComponent }) => 
                       className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                       onClick={(e) => handleSubmit(e)}
                     >
-                      Crear {nameComponent}
+                      Crear {nameComponent === "users" ? "usuario" : "producto"}
                     </button>
                     <button
                       type="button"

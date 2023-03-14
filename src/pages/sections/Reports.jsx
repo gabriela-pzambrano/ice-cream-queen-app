@@ -24,7 +24,7 @@ const Reports = ({ token }) => {
       name: 'Total de Usuarios',
       stat: data?.countUsers,
       icon: UsersIcon,
-      change: '122',
+      change: '9',
       changeType: 'increase',
     },
     {
@@ -41,7 +41,7 @@ const Reports = ({ token }) => {
       stat: data?.ordersDelivered,
       icon: BuildingStorefrontIcon,
       change: '3.2%',
-      changeType: 'decrease',
+      changeType: 'increase',
     },
     {
       id: 4,

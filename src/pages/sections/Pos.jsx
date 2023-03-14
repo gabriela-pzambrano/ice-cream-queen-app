@@ -44,7 +44,7 @@ const Pos = ({
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [limit, page.pos]);
+  }, [limit, page]);
 
   return (
     <div className="flex flex-1 flex-col items-stretch overflow-hidden bg-background">

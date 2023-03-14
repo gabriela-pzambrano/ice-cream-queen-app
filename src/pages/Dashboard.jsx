@@ -17,9 +17,9 @@ import Reports from './sections/Reports';
 
 
 const userNavigation = [
-  { id:1, name: 'Mi Perfil' },
-  { id:2, name: 'Configuración' },
-  { id:3, name: 'Cerrar Sesión' },
+  { id: 1, name: 'Mi Perfil' },
+  { id: 2, name: 'Configuración' },
+  { id: 3, name: 'Cerrar Sesión' },
 ];
 
 const limitProducts = {
@@ -36,14 +36,14 @@ const Dashboard = () => {
   const [orders, setOrders] = useState();
   const [open, setOpen] = useState(false);
   const token = JSON.parse(localStorage.getItem('token'));
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem('user'));
   const [width, setWidth] = useState(window.innerWidth);
   const [limit, setLimit] = useState();
   const [page, setPage] = useState({
     orders: 1,
     pos: 1,
     products: 1,
-    users: 1
+    users: 1,
   });
   const [paginacion, setPaginacion] = useState({});
   const [actualOrders, setActualOrders] = useState(
@@ -181,7 +181,9 @@ const Dashboard = () => {
             setType={setType}
             search={search}
             setSearch={setSearch}
-            labelSection={selectedTab.name !== "POS" ? "Lista de Registros" : undefined}
+            labelSection={
+              selectedTab.name !== 'POS' ? 'Lista de Registros' : undefined
+            }
           />
           {selectedTab.name === 'POS' ? (
             <Pos
@@ -243,7 +245,9 @@ const Dashboard = () => {
               setPage={setPage}
             />
           ) : (
-            <Reports token={token}/>
+            <Reports
+              token={token}
+            />
           )}
         </div>
       </div>
