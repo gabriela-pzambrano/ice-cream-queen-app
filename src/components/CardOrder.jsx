@@ -52,7 +52,7 @@ const CardOrder = ({ id, client, dateEntry, products, status }) => {
           })}
         </h3>
       </section>
-      <section className="flex flex-col items-center justify-center gap-2 pb-2 pt-8 z-10">
+      <section className="flex flex-col items-center justify-center gap-2 pb-2 pt-2 z-10">
         <h3
           className={`font-semibold ${
             newStatus ? 'text-secondary-500' : 'text-primary-500'

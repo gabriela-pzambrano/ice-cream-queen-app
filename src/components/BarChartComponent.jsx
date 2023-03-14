@@ -10,7 +10,7 @@ import {
   } from 'recharts';
   
   const BarChartComponent = ({ data }) => {
-    const colors = ['#7671D6', '#89D1C9', '#4FABF5', '#7671D6', '#89D1C9', '#4FABF5', '#7671D6', '#89D1C9'];
+    const colors = ['#7671D6', '#89D1C9', '#4FABF5', '#7671D6', '#89D1C9', '#4FABF5', '#7671D6', '#89D1C9', '#4FABF5'];
     return (
       <div className="bg-white mt-8 flex flex-col rounded-md ">
         <h4 className="text-primary-500 font-bold text-center pt-4 text-lg">
@@ -18,7 +18,7 @@ import {
         </h4>
         <ResponsiveContainer width="100%" height={530}>
           <BarChart
-            data={data}
+            data={data.slice(0,7)}
             margin={{
               top: 50,
               right: 50,

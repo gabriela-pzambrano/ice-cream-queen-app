@@ -9,13 +9,14 @@ import ModalCreate from '../../components/ModalCreate';
 import ModalUpdate from '../../components/ModalUpdate';
 
 const Users = ({users, setUsers, token, limit, page, setPage, paginacion, setPaginacion }) => {
-  const nameComponent = 'Usuario'
+  const nameComponent = 'users';
 
   const [email, setEmail] = useState();
   const [refresh, setRefresh] = useState();
   const [open, setOpen] = useState(false);
 
   const [openUpdate, setOpenUpdate] = useState(false);
+  const [id, setId] = useState();
 
 
   const dataUsers = (response) => {
@@ -82,7 +83,7 @@ const Users = ({users, setUsers, token, limit, page, setPage, paginacion, setPag
   return (
     <>
     <ModalCreate open={open} setOpen={setOpen} token={token} setPage={setPage} page={page} nameComponent={nameComponent}/>
-    <ModalUpdate openUpdate={openUpdate} setOpenUpdate={setOpenUpdate} token={token} setPage={setPage} page={page} nameComponent={nameComponent} /* userUpdate={userUpdate} *//>
+    <ModalUpdate openUpdate={openUpdate} id={id} setOpenUpdate={setOpenUpdate} token={token} setPage={setPage} page={page} nameComponent={nameComponent} /* userUpdate={userUpdate} *//>
       <div className="flex flex-1 flex-col items-stretch overflow-hidden bg-background">
         {!users ? (
           <section className="flex flex-col flex-1 overflow-y-auto justify-center items-center">
@@ -101,7 +102,7 @@ const Users = ({users, setUsers, token, limit, page, setPage, paginacion, setPag
           </section>
         ) :  (
           <main className="flex-1 overflow-y-auto">
-            <TableUsers users={users} page={page} setPage={setPage} paginacion={paginacion} handleChange={handleChange} refresh={refreshUsers} deleteUser={userDelete} setOpen={setOpen} setOpenUpdate={setOpenUpdate} />
+            <TableUsers users={users} page={page} setPage={setPage} setId={setId} paginacion={paginacion} handleChange={handleChange} refresh={refreshUsers} deleteUser={userDelete} setOpen={setOpen} setOpenUpdate={setOpenUpdate} />
           </main>
           )
         }

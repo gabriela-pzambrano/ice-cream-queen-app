@@ -11,7 +11,14 @@ const TableUsers = ({
   deleteUser,
   setOpen,
   setOpenUpdate,
+  setId
 }) => {
+
+  const handleEdit = (id) => {
+    setOpenUpdate(true);
+    setId(id);
+  }
+
   return (
     <div className="px-4 py-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -132,7 +139,7 @@ const TableUsers = ({
                 <td className="flex justify-end gap-4 lg:gap-4 whitespace-nowrap py-4 pl-3 pr-3 text-right text-xs font-medium sm:pr-6 sm:text-sm">
                   <button
                     className="flex gap-1 items-center text-xs text-background hover:bg-primary-700 px-1.5 py-1 rounded-md bg-primary-500"
-                    onClick={()=> setOpenUpdate(true)}
+                    onClick={()=> handleEdit(user._id)}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

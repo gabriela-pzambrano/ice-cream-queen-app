@@ -13,7 +13,7 @@ const Orders = ({ orders, setOrders, token, limit, page, setPage, paginacion, se
   useEffect(() => {
     getOrders(token, limit, page.orders).then((response) => dataOrders(response));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [limit, page.orders]);
+  }, [limit, page]);
 
   return (
     <>

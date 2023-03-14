@@ -8,13 +8,14 @@ import ModalCreate from '../../components/ModalCreate';
 import ModalUpdate from '../../components/ModalUpdate';
 
 const Products = ({products, token, limit, page, setPage, paginacion,  dataProducts, type, setType}) => {
-  const nameComponent = 'producto';
+  const nameComponent = 'products';
 
   const [search, setSearch] = useState();
   const [refresh, setRefresh] = useState();
   const [open, setOpen] = useState(false);
 
   const [openUpdate, setOpenUpdate] = useState(false);
+  const [id, setId] = useState();
 
   const handleSubmit = async () => {
     const searchData = await searchProducts(token, search, limit, 1, 'search');
@@ -55,7 +56,7 @@ const Products = ({products, token, limit, page, setPage, paginacion,  dataProdu
     getProducts(token, limit, page.products, type).then((response) => dataProducts(response));
     setRefresh(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [limit, page.products, refresh]);
+  }, [limit, page, refresh]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
@@ -68,7 +69,7 @@ const Products = ({products, token, limit, page, setPage, paginacion,  dataProdu
   return (
     <>
     <ModalCreate open={open} setOpen={setOpen} token={token} setPage={setPage} page={page} nameComponent={nameComponent}/>
-    <ModalUpdate openUpdate={openUpdate} setOpenUpdate={setOpenUpdate}/>
+    <ModalUpdate openUpdate={openUpdate} id={id} token={token}  setPage={setPage} page={page}  setOpenUpdate={setOpenUpdate} nameComponent={nameComponent}/>
       <div className="flex flex-1 flex-col items-stretch overflow-hidden bg-background">
         {!products ? (
           <section className="flex flex-col flex-1 overflow-y-auto justify-center items-center">
@@ -87,7 +88,7 @@ const Products = ({products, token, limit, page, setPage, paginacion,  dataProdu
           </section>
         ) : (
           <main className="flex-1 overflow-y-auto">
-            <TableProducts products={products} page={page} setPage={setPage} paginacion={paginacion} handleChange={handleChange} refresh={refreshProducts} deleteProduct={productDelete} setOpen={setOpen} setOpenUpdate={setOpenUpdate}/>
+            <TableProducts products={products} page={page} setId={setId} setPage={setPage} paginacion={paginacion} handleChange={handleChange} refresh={refreshProducts} deleteProduct={productDelete} setOpen={setOpen} setOpenUpdate={setOpenUpdate}/>
           </main>
         )}
       </div>
